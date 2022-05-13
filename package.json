@@ -1,0 +1,51 @@
+{
+  "name": "name-pronunciation-ui",
+  "version": "1.0.0",
+  "description": "Name pronunciation setup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack serve",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kotlaraghava2/name-pronounce-ui.git"
+  },
+  "keywords": [
+    "name",
+    "pronounce"
+  ],
+  "author": "Raghava Reddy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kotlaraghava2/name-pronounce-ui/issues"
+  },
+  "homepage": "https://github.com/kotlaraghava2/name-pronounce-ui#readme",
+  "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.6.2",
+    "@mui/material": "^5.6.4",
+    "@mui/x-data-grid": "^5.10.0",
+    "@mui/x-data-grid-generator": "^5.10.0",
+    "@reduxjs/toolkit": "^1.8.1",
+    "axios": "^0.27.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-redux": "^8.0.1",
+    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0",
+    "redux": "^4.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/preset-env": "^7.17.10",
+    "@babel/preset-react": "^7.16.7",
+    "babel-loader": "^8.2.5",
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0"
+  }
+}
