@@ -1,5 +1,5 @@
 import { ROLE_ADMIN, ROLE_EMPLOYEE } from "../../common/constants";
-import { get } from "../../service";
+import { doGet } from "../../service";
 
 export const SET_LOGIN_USER = "SET_LOGIN_USER";
 export const setLoginUser = (user) => {
@@ -18,11 +18,11 @@ export const setLoginUser = (user) => {
 })};
 
 export const login = userid => dispatch => {
-    get("/employee/".concat(userid))
+    doGet("/employee/".concat(userid))
     .then(results => {
         dispatch(setLoginUser({...results.data.data}));
     });
-    
+
     // dispatch(setLoginUser({uid:userid, entitlement:ROLE_ADMIN}));
-    
+
 }

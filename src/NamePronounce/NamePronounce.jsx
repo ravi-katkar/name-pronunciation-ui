@@ -8,10 +8,11 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 import { styled } from '@mui/material/styles';
 import { baseURL } from "../service/index.js";
 import UploadIcon from '@mui/icons-material/Upload';
+import SaveIcon from '@mui/icons-material/Save';
 
 const NamePronounce = () => {
   const user = useSelector(state => state.userEntitlement.user);
-  const [preferredName, setPreferredName] = useState(user.preferredName || user.firstName);
+  const [preferredName, setPreferredName] = useState(user.preferredName);
   const [mode, setMode] = useState("default");
   const [updatePrefName, setUpdatePrefName] = useState(false);
   const [blobObj, setBlobObj] = useState("");
@@ -87,7 +88,7 @@ const NamePronounce = () => {
         <TextField name="emailId" value={user.emailId} disabled label="Email" />
         <TextField
           name="preferredName"
-          value={updatePrefName? preferredName : user.preferredName || user.firstName}
+          value={preferredName}
           disabled={!updatePrefName}
           label="Preffered Name"
           onChange={({target}) => setPreferredName(target.value)}
@@ -107,7 +108,10 @@ const NamePronounce = () => {
             }}
           />
           Update Preferred Name
-          {updatePrefName && <Button
+          &nbsp;
+          {updatePrefName &&
+          <Button
+            variant="contained"
             onClick={() => {
               setMode("standard");
               setUpdatePrefName(false);
@@ -118,7 +122,8 @@ const NamePronounce = () => {
 
       </Box>
       <br />
-      { !(mode==="custom" || updatePrefName) && <Box sx={{ borderRadius: 1, border:1, padding:2,'& .MuiTextField-root': { m: 1, width: '25ch' } }}>
+      { !(mode==="custom" || updatePrefName) &&
+      <Box sx={{ borderRadius: 1, border:1, padding:2,'& .MuiTextField-root': { m: 1, width: '25ch' } }}>
         <div style={{display: "flex"}}>
           {/* <Button
             disabled={startBtnDisabled}
@@ -138,7 +143,8 @@ const NamePronounce = () => {
               <source src={pronunciationURL()} type="audio/mp3"></source>
             </audio>
           </div>
-          <Button onClick={standardUpload} endIcon={<UploadIcon />}>Upload</Button>
+          &nbsp;
+          &nbsp;
           <Button
             onClick={() => {setMode("custom")}}
           >
@@ -155,6 +161,12 @@ const NamePronounce = () => {
           </Button> */}
         </div>
       </Box>}
+      &nbsp;
+      <div>
+        {mode === "standard" &&
+          <Button variant="contained" onClick={standardUpload} endIcon={<SaveIcon />}>Save</Button>
+        }
+      </div>
 
       <BootstrapDialog open={(mode==="custom")} onClose={handleClose} disableEscapeKeyDown={true}>
         <BootstrapDialogTitle>Voice Recorder</BootstrapDialogTitle>

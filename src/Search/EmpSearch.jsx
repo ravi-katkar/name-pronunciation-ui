@@ -1,18 +1,23 @@
 import * as React from 'react';
-import { Button, Stack, TextField } from '@mui/material';
+import { Button, Stack, Switch, TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid } from '@mui/x-data-grid';
 // import { SEARCH_RESULTS_COLUMNS } from '../common/constants';
-import { getSearchResults } from '../redux/actions/search.action';
+import { deleteEmployee, getSearchResults, updateEmployee } from '../redux/actions/search.action';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import { baseURL } from '../service';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
+import { CONFIRMATION, ROLE_ADMIN, ROLE_EMPLOYEE, SUCCESS } from '../common/constants';
+import { openDialog, OPEN_DIALOG } from '../redux/actions/common.action';
 
 export default function EmpSearch() {
+  const userEntitlement = useSelector(state => state.userEntitlement.user.entitlement);
   const [searchCriteria, setSearchCriteria] = React.useState("");
   const [selectedUID, setSelectedUID] = React.useState("");
   const dispatch = useDispatch();
   const searchResults = useSelector(state => state.search.searchResults);
-  const SEARCH_RESULTS_COLUMNS = [
+  const tableColumns = [
     {
         field: "uid",
         headerName: "User ID"
@@ -40,9 +45,9 @@ export default function EmpSearch() {
     {
         field: "pronounce",
         headerName: "Pronounce Name",
-        flex: 4,
+        flex: 2,
         renderCell: data => {
-            console.log("render cell: ", data);
+            // console.log("render cell: ", data);
             const uid = data.row.uid;
             const getAudio = (uid) =>{
               setSelectedUID(uid);
@@ -64,6 +69,63 @@ export default function EmpSearch() {
         }
     }
  ];
+
+ const adminColumns = [
+  {
+    field:"delete",
+    headerName: "Delete",
+    renderCell: ({row}) =>{
+      const uid= row.uid;
+      const deleteEmp = uid =>{
+        deleteEmployee(uid)
+        .then(response => {
+          if(response === SUCCESS){
+            dispatch(openDialog("Pronunciation record deleted successfully"), CONFIRMATION);
+            dispatch(getSearchResults(searchCriteria));
+          }
+        })
+      }
+      return(
+        <React.Fragment>
+          <Button onClick={()=>deleteEmp(uid)} startIcon={<DeleteIcon />} />
+        </React.Fragment>
+      );
+    }
+  },
+  {
+    field: "adminRights",
+    headerName: "Admin",
+    renderCell: ({row}) => {
+      const uid= row.uid;
+      const updateAdminRights = flag => {
+        updateEmployee({
+            "uid": uid,
+            "empId": row.empId,
+            "firstName": row.firstName,
+            "entitlement": flag? ROLE_ADMIN : ROLE_EMPLOYEE
+        })
+        .then(response => {
+          if(response === SUCCESS){
+            dispatch(openDialog("Admin rights updated successfully", CONFIRMATION));
+            dispatch(getSearchResults(searchCriteria));
+          }
+        })
+      }
+      return(
+        <React.Fragment>
+          <Switch checked={row.entitlement === ROLE_ADMIN} onChange={({target})=>updateAdminRights(target.checked)} />
+        </React.Fragment>
+      );
+    }
+  }
+ ];
+ const getColumns = () => {
+   if(userEntitlement === ROLE_ADMIN){
+     return [...tableColumns, ...adminColumns];
+   }else{
+     return tableColumns;
+   }
+ }
   return (
     <div>
         <h1>Employee Search</h1>
@@ -74,14 +136,20 @@ export default function EmpSearch() {
                 variant="outlined"
                 name='searchCriteria'
                 onChange={({target})=>setSearchCriteria(target.value)}
+                sx={{width: "40%"}}
             />
-            <Button onClick={()=>dispatch(getSearchResults(searchCriteria))}>Search</Button>
+            &nbsp;&nbsp;
+            <Button
+              style={{paddingLeft: "2rem"}}
+              variant='contained'
+              onClick={()=>dispatch(getSearchResults(searchCriteria))}
+              endIcon={<SearchIcon />}>Search</Button>
         </div>
         <div style={{paddingTop: "1rem"}}>
         <DataGrid
             autoHeight
             rows={searchResults}
-            columns={SEARCH_RESULTS_COLUMNS}
+            columns={getColumns()}
             pageSize={10}
             rowsPerPageOptions={[5]}
             // checkboxSelection
