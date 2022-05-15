@@ -10,7 +10,6 @@ const MainContent = () => {
 
     return(
         <Box component="main" sx={{ flexGrow: 1, paddingTop: 6, paddingLeft: 2 }}>
-            {/* <Toolbar /> */}
             <AppRoutes />
         </Box>
     );

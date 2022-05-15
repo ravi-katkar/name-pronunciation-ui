@@ -39,7 +39,7 @@ export default function SignIn() {
   //     password: data.get('password'),
   //   });
   // };
-  const [userid, setUserid] = React.useState("");
+  const [userid, setUserid] = React.useState("UID01");
   const [password, setPassword] = React.useState("");
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
@@ -73,6 +73,7 @@ export default function SignIn() {
               id="userid"
               label="User ID"
               name="userid"
+              value={userid}
               autoFocus
               onChange={({target})=>
                 {
@@ -99,7 +100,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In 
+              Sign In
             </Button>
             {/* <Grid container>
               <Grid item xs>

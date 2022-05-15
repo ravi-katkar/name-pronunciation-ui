@@ -6,7 +6,7 @@ export const EMPLOYEE_MENU = [
         path: "/search"
     },
     {
-        name: "Update Name Pronounce",
+        name: "My Name Pronunciation",
         path: "/pronounce"
     } ];
 export const ADMIN_MENU = [
@@ -15,7 +15,7 @@ export const ADMIN_MENU = [
         path: "/search"
     },
     {
-        name: "Update Name Pronounce",
+        name: "My Name Pronunciation",
         path: "/pronounce"
     },
     {
@@ -23,34 +23,3 @@ export const ADMIN_MENU = [
         path: "/manageEmployees"
     }
 ];
-
-export const SEARCH_RESULTS_COLUMNS = [
-    {
-        field: "uid",
-        headerName: "User ID"
-    },
-    {
-        field: "empId",
-        headerName: "Emp ID"
-    },
-    {
-        field: "firstName",
-        headerName: "First Name"
-    },
-    {
-        field: "middleName",
-        headerName: "Middle Name"
-    },
-    {
-        field: "lastName",
-        headerName: "Last Name"
-    },
-    {
-        field: "preferredName",
-        headerName: "Preffered Name"
-    },
-    {
-        field: "emailId",
-        headerName: "Email ID"
-    }
- ];

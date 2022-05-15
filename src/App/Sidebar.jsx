@@ -19,7 +19,7 @@ import { ROLE_ADMIN, EMPLOYEE_MENU, ADMIN_MENU } from '../common/constants.js';
 const drawerWidth = 240;
 
 export default function Sidebar() {
-  const role = useSelector(state => state.userEntitlement.entitlement);
+  const role = useSelector(state => state.userEntitlement.user.entitlement);
   let sideMenuList = [];
   console.log("User role=", role);
   if(role === ROLE_ADMIN){
@@ -30,7 +30,7 @@ export default function Sidebar() {
   console.log("menus=", sideMenuList);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   return (
-    
+
       <>
       <Drawer
         variant="permanent"
@@ -48,18 +48,18 @@ export default function Sidebar() {
               <ListItem key={index} disablePadding onClick={()=> <Navigate to={menu.path} />}>
                 <ListItemButton selected={index===selectedIndex} onClick={()=>setSelectedIndex(index)}>
                   <ListItemText >
-                   <NavLink to={menu.path} style={{textDecoration: "none"}}>{menu.name}</NavLink> 
+                   <NavLink to={menu.path} style={{textDecoration: "none"}}>{menu.name}</NavLink>
                   </ListItemText>
                 </ListItemButton>
               </ListItem>
-             
+
               <Divider />
             </>
             ))}
           </List>
         </Box>
       </Drawer>
-      
+
       </>
   );
 }
