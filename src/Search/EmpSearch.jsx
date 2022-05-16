@@ -42,14 +42,17 @@ export default function EmpSearch() {
         field: "preferredName",
         headerName: "Preffered Name"
     },
+    // {
+    //     field: "emailId",
+    //     headerName: "Email ID"
+    // },
     {
-        field: "emailId",
-        headerName: "Email ID"
+      field: "phonetic",
+      headerName: "Phonetic"
     },
     {
         field: "pronounce",
         headerName: "Pronounce Name",
-        flex: 2,
         renderCell: data => {
             // console.log("render cell: ", data);
             const uid = data.row.uid;

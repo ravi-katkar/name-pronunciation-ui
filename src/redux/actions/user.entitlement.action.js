@@ -6,16 +6,17 @@ export const setLoginUser = (user) => {
     console.log("user data in setLoginUser=", user);
     return({
     type: SET_LOGIN_USER,
-    uid: user.uid,
-    empId: user.empId,
-    firstName: user.firstName,
-    middleName: user.middleName,
-    lastName: user.lastName,
-    preferredName: user.preferredName,
-    isPreferredNameChosen: user.isPreferredNameChosen,
-    emailId: user.emailId,
-    entitlement: user.entitlement,
-    phonetic: user.phonetic
+    ...user
+    // uid: user.uid,
+    // empId: user.empId,
+    // firstName: user.firstName,
+    // middleName: user.middleName,
+    // lastName: user.lastName,
+    // preferredName: user.preferredName,
+    // isPreferredNameChosen: user.isPreferredNameChosen,
+    // emailId: user.emailId,
+    // entitlement: user.entitlement,
+    // phonetic: user.phonetic
 })};
 
 export const setUserDetails = userid => dispatch => {

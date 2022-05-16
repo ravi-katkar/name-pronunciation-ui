@@ -21,6 +21,7 @@ const NamePronounce = () => {
   const [mode, setMode] = useState("default");
   const [updatePrefName, setUpdatePrefName] = useState(false);
   const [blobObj, setBlobObj] = useState("");
+  const [refresh, setRefresh] = useState(false);
   const preferredNameRef = useRef();
   const handleClose = () => {
     setMode("default");
@@ -178,12 +179,16 @@ const NamePronounce = () => {
               "uid": user.uid,
               "empId": user.empId,
               "firstName": user.firstName,
-              "preferredName": preferredName
+              "preferredName": preferredName,
+              "entitlement": user.entitlement,
+              "createdBy": "SYSTEM"
             })
             .then(response => {
               if(response === SUCCESS){
                 dispatch(setUserDetails(user.uid));
                 dispatch(openDialog("Updated Successfully", CONFIRMATION));
+                //setRefresh(!refresh);
+                setMode("default");
               }
             })
             .catch(error=>{

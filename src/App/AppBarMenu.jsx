@@ -2,7 +2,7 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Avatar } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
 import AvatarWrapper from './AvatarWrapper';
 
 export default function AppBarMenu() {
@@ -15,6 +15,13 @@ export default function AppBarMenu() {
           </Typography>
           {/* <Button color="inherit">Login</Button> */}
           {/* <Login /> */}
+          <Button color="inherit"
+            onClick={()=>{
+
+            }}
+          >
+            Logout
+            </Button>
           <AvatarWrapper />
         </Toolbar>
       </AppBar>
