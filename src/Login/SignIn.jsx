@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
-import { login } from '../redux/actions/user.entitlement.action';
+import { setUserDetails } from '../redux/actions/user.entitlement.action';
 
 // function Copyright(props: any) {
 //   return (
@@ -45,7 +45,7 @@ export default function SignIn() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // alert(userid);
-    dispatch(login(userid));
+    dispatch(setUserDetails(userid));
   }
   return (
     <ThemeProvider theme={theme}>

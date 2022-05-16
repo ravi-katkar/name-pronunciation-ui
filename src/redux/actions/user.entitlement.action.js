@@ -14,10 +14,11 @@ export const setLoginUser = (user) => {
     preferredName: user.preferredName,
     isPreferredNameChosen: user.isPreferredNameChosen,
     emailId: user.emailId,
-    entitlement: user.entitlement
+    entitlement: user.entitlement,
+    phonetic: user.phonetic
 })};
 
-export const login = userid => dispatch => {
+export const setUserDetails = userid => dispatch => {
     doGet("/employee/".concat(userid))
     .then(results => {
         dispatch(setLoginUser({...results.data.data}));

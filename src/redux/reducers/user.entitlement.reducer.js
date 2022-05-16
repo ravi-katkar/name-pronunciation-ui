@@ -16,7 +16,8 @@ const userEntitlementReducer = (state = {...initialState}, action) => {
                 preferredName: action.preferredName,
                 isPreferredNameChosen: action.isPreferredNameChosen,
                 emailId: action.emailId,
-                entitlement: action.entitlement
+                entitlement: action.entitlement,
+                phonetic: action.phonetic
             }
             return {
                 ...state,

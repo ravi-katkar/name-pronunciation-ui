@@ -1,11 +1,13 @@
 import { Box, Button, Checkbox, IconButton, TextField, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { uploadAudio } from "../redux/actions/custom.audio.action";
 import MicIcon from '@mui/icons-material/Mic';
 import StopIcon from '@mui/icons-material/Stop';
 import UploadIcon from '@mui/icons-material/Upload';
 import { flexbox } from "@mui/system";
+import { CONFIRMATION, ERROR, SUCCESS } from "../common/constants";
+import { openDialog } from "../redux/actions/common.action";
 const RecordRTC = require("./recordRTC");
 
 let microphone;
@@ -13,6 +15,7 @@ let recorder;
 let audio;
 const RecordAudio = (props) => {
 
+  const dispatch = useDispatch();
   const [startBtnDisabled, setStartButtonDisabled] = useState(false);
   const [stopBtnDisabled, setStopBtnDisabled] = useState(true);
   const [relMicBtnDisabled, setRelMicBtnDisabled] = useState(true);
@@ -243,7 +246,15 @@ const captureMicrophone = (callback) => {
         "createdBy":"SYSTEM"
         // ,
         // "preferredName": props.preferredName
-    });
+    })
+    .then(response=>{
+      if(response.data.status===SUCCESS){
+        dispatch(openDialog("Voice record uploaded successfully."), CONFIRMATION);
+      }
+    })
+    .catch(error=>{
+      dispatch(openDialog("Unable to upload voice record.", ERROR));
+    })
     props.handleClose();
     props.setMode("default");
     console.log("download5");

@@ -18,7 +18,7 @@ const AvatarWrapper = () => {
   }, []);
 
   return(
-    <Avatar src={imageURL}>{firstName.charAt(0)}</Avatar>
+    <Avatar src={imageURL}>{firstName?firstName.charAt(0):""}</Avatar>
   );
 }
 export default AvatarWrapper;

@@ -20,13 +20,13 @@ const drawerWidth = 240;
 
 export default function Sidebar() {
   const role = useSelector(state => state.userEntitlement.user.entitlement);
-  let sideMenuList = [];
+  let sideMenuList = EMPLOYEE_MENU;
   console.log("User role=", role);
-  if(role === ROLE_ADMIN){
-    sideMenuList = ADMIN_MENU;
-  }else{
-    sideMenuList = EMPLOYEE_MENU;
-  }
+  // if(role === ROLE_ADMIN){
+  //   sideMenuList = ADMIN_MENU;
+  // }else{
+  //   sideMenuList = EMPLOYEE_MENU;
+  // }
   console.log("menus=", sideMenuList);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   return (

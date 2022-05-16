@@ -10,11 +10,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import { CONFIRMATION, ROLE_ADMIN, ROLE_EMPLOYEE, SUCCESS } from '../common/constants';
 import { openDialog, OPEN_DIALOG } from '../redux/actions/common.action';
+import { PronounceDialog } from './PronounceDialog.jsx';
 
 export default function EmpSearch() {
   const userEntitlement = useSelector(state => state.userEntitlement.user.entitlement);
   const [searchCriteria, setSearchCriteria] = React.useState("");
   const [selectedUID, setSelectedUID] = React.useState("");
+  const [openPronounceDialog, setOpenPronounceDialog] = React.useState(false);
+  const [phonetic, setPhonetic] = React.useState("");
+  const [pronounceUrl, setPronounceUrl] = React.useState("");
   const dispatch = useDispatch();
   const searchResults = useSelector(state => state.search.searchResults);
   const tableColumns = [
@@ -51,6 +55,9 @@ export default function EmpSearch() {
             const uid = data.row.uid;
             const getAudio = (uid) =>{
               setSelectedUID(uid);
+              setPhonetic(data.row.phonetic);
+              setPronounceUrl(baseURL+"/getNamePronunciation/"+uid);
+              setOpenPronounceDialog(true);
               console.log("selected UID=", uid);
             }
             const pronunciationURL = (uid) => {
@@ -59,11 +66,11 @@ export default function EmpSearch() {
             return(
               <React.Fragment>
                 <Button key={uid} onClick={()=>getAudio(uid)} startIcon={<CampaignIcon />} />
-                {selectedUID===uid &&
+                {/* {selectedUID===uid &&
                   <audio key={uid} controls autoPlay playsInline>
                     <source src={pronunciationURL(uid)} type="audio/mp3" />
                   </audio>
-                }
+                } */}
               </React.Fragment>
             );
         }
@@ -126,35 +133,46 @@ export default function EmpSearch() {
      return tableColumns;
    }
  }
+
+  const handleClose = () => {
+    setOpenPronounceDialog(false);
+  }
   return (
     <div>
-        <h1>Employee Search</h1>
-        <div style={{display: 'flex', alignItems: 'center'}}>
-            <TextField
-                id="outlined-basic"
-                label="Search"
-                variant="outlined"
-                name='searchCriteria'
-                onChange={({target})=>setSearchCriteria(target.value)}
-                sx={{width: "40%"}}
-            />
-            &nbsp;&nbsp;
-            <Button
-              style={{paddingLeft: "2rem"}}
-              variant='contained'
-              onClick={()=>dispatch(getSearchResults(searchCriteria))}
-              endIcon={<SearchIcon />}>Search</Button>
-        </div>
-        <div style={{paddingTop: "1rem"}}>
-        <DataGrid
-            autoHeight
-            rows={searchResults}
-            columns={getColumns()}
-            pageSize={10}
-            rowsPerPageOptions={[5]}
-            // checkboxSelection
-        />
-        </div>
+      <h1>Employee Search</h1>
+      <div style={{display: 'flex', alignItems: 'center'}}>
+          <TextField
+              id="outlined-basic"
+              label="Search"
+              variant="outlined"
+              name='searchCriteria'
+              onChange={({target})=>setSearchCriteria(target.value)}
+              sx={{width: "40%"}}
+          />
+          &nbsp;&nbsp;
+          <Button
+            style={{paddingLeft: "2rem"}}
+            variant='contained'
+            onClick={()=>dispatch(getSearchResults(searchCriteria))}
+            endIcon={<SearchIcon />}>Search</Button>
+      </div>
+      <div style={{paddingTop: "1rem"}}>
+      <DataGrid
+          autoHeight
+          rows={searchResults}
+          columns={getColumns()}
+          pageSize={10}
+          rowsPerPageOptions={[5]}
+          // checkboxSelection
+      />
+      </div>
+      <PronounceDialog
+        open={openPronounceDialog}
+        phonetic={phonetic}
+        url={pronounceUrl}
+        handleClose={handleClose}
+        uid={selectedUID}
+      />
     </div>
   );
 }

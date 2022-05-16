@@ -1,9 +1,10 @@
-import { CLOSE_DIALOG, OPEN_DIALOG } from "../actions/common.action";
+import { CLOSE_DIALOG, CLOSE_PROGRESS, OPEN_DIALOG, OPEN_PROGRESS } from "../actions/common.action";
 
 const initialState = {
   openDialog: false,
   message: "",
-  messageType: "Confirmation"
+  messageType: "Confirmation",
+  progress: false
 }
 export const commonReducer = (state={}, action) => {
   switch(action.type){
@@ -19,6 +20,16 @@ export const commonReducer = (state={}, action) => {
         ...state,
         openDialog: false,
         message: ""
+      });
+    case OPEN_PROGRESS:
+      return({
+        ...state,
+        progress: true
+      });
+    case CLOSE_PROGRESS:
+      return({
+        ...state,
+        progress: false
       });
     default: return({
       ...state

@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, Dialog, DialogContent, DialogContentText, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import RecordAudio from "../Audio/RecordAudio.js";
 import Record from "../Record/Record.jsx";
 import { getStandardPronunciation, uploadAudio } from "../redux/actions/custom.audio.action.js";
@@ -9,8 +9,13 @@ import { styled } from '@mui/material/styles';
 import { baseURL } from "../service/index.js";
 import UploadIcon from '@mui/icons-material/Upload';
 import SaveIcon from '@mui/icons-material/Save';
+import { updateEmployee } from "../redux/actions/search.action.js";
+import { CONFIRMATION, ERROR, SUCCESS } from "../common/constants.js";
+import { openDialog } from "../redux/actions/common.action.js";
+import { setUserDetails } from "../redux/actions/user.entitlement.action.js";
 
 const NamePronounce = () => {
+  const dispatch = useDispatch();
   const user = useSelector(state => state.userEntitlement.user);
   const [preferredName, setPreferredName] = useState(user.preferredName);
   const [mode, setMode] = useState("default");
@@ -39,12 +44,12 @@ const NamePronounce = () => {
   // },[]);
   const audioSrc = "blob:"+blobObj;
   console.log("audio src=", blobObj);
-  const openDialog = (mode === "custom");
+  // const openDialog = (mode === "custom");
   const pronunciationURL = () => {
     const blobObj = "";
     let url = baseURL+"/getNamePronunciation/"+user.uid;
     if(mode==="standard"){
-      url = baseURL+"/synthesize2?inputText="+preferredName;
+      url = baseURL+"/synthesize?inputText="+preferredName;
       // console.log("before................");
       // blobObj = await getStandardPronunciation(preferredName);
       // console.log("after................");
@@ -124,15 +129,18 @@ const NamePronounce = () => {
       <br />
       { !(mode==="custom" || updatePrefName) &&
       <Box sx={{ borderRadius: 1, border:1, padding:2,'& .MuiTextField-root': { m: 1, width: '25ch' } }}>
+        {!(mode === "standard") &&
+        <div style={{display: "flex", paddingBottom: "2rem"}}>
+          <Typography component="span" style={{paddingRight: "6rem"}}>
+            Phonetic
+          </Typography>
+          &nbsp;
+          <Typography component="span" style={{background: "gainsboro"}}>
+           {user.phonetic}
+          </Typography>
+
+        </div>}
         <div style={{display: "flex"}}>
-          {/* <Button
-            disabled={startBtnDisabled}
-            onClick={startRecording}
-            endIcon={<CampaignIcon />}
-            variant="outlined"
-          >
-            Get Standard Pronunciation
-          </Button> */}
           <Typography>
             Pronounciation
             <CampaignIcon />
@@ -164,7 +172,29 @@ const NamePronounce = () => {
       &nbsp;
       <div>
         {mode === "standard" &&
-          <Button variant="contained" onClick={standardUpload} endIcon={<SaveIcon />}>Save</Button>
+          <Button
+            variant="contained"
+            onClick={()=>{updateEmployee({
+              "uid": user.uid,
+              "empId": user.empId,
+              "firstName": user.firstName,
+              "preferredName": preferredName
+            })
+            .then(response => {
+              if(response === SUCCESS){
+                dispatch(setUserDetails(user.uid));
+                dispatch(openDialog("Updated Successfully", CONFIRMATION));
+              }
+            })
+            .catch(error=>{
+              dispatch(openDialog("Something went wrong! Unable to save data", ERROR));
+            })
+          }
+          }
+            endIcon={<SaveIcon />}
+          >
+            Save
+          </Button>
         }
       </div>
 
