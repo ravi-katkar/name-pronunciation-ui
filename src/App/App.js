@@ -17,14 +17,14 @@ const App = props => {
       {!loggedIn && <SignIn />}
       {loggedIn &&
         <Box sx={{ display: 'flex' }}>
+          {/* { progress &&
+            <CircularProgress />
+          } */}
           <CssBaseline />
           <AppBarMenu />
           <Sidebar />
           <MainContainer />
           <Feedback />
-          {/* { progress &&
-            <CircularProgress />
-          } */}
         </Box>
       }
     </>);

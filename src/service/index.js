@@ -1,7 +1,7 @@
 import axios from "axios";
 import { closeProgress, openProgress } from "../redux/actions/common.action";
-export const baseURL = "http://localhost:9080/namePronounciation";
-//export const baseURL = "http://namepronunciation-api.eastus.cloudapp.azure.com:9080/namePronounciation";
+//export const baseURL = "http://localhost:9080/namePronounciation";
+export const baseURL = "http://namepronunciation-api.eastus.cloudapp.azure.com:9080/namePronounciation";
 
 
 export const doGet = path => axios.get(baseURL.concat(path));
