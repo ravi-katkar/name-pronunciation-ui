@@ -249,6 +249,7 @@ const captureMicrophone = (callback) => {
     })
     .then(response=>{
       if(response.data.status===SUCCESS){
+        props.refreshPage(new Date());
         dispatch(openDialog("Voice record uploaded successfully."), CONFIRMATION);
       }
     })

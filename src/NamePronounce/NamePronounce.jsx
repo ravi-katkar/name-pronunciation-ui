@@ -31,9 +31,9 @@ const NamePronounce = () => {
   const [mode, setMode] = useState("default");
   const [updatePrefName, setUpdatePrefName] = useState(false);
   const [blobObj, setBlobObj] = useState("");
-  const [refresh, setRefresh] = useState(false);
-  const [country, setCountry] = useState("en-US");
-  const [gender, setGender] = useState("FEMALE");
+  const [refresh, setRefresh] = useState("");
+  const [country, setCountry] = useState(user.locale || "en-US");
+  const [gender, setGender] = useState(user.genderVoice || "FEMALE");
   const preferredNameRef = useRef();
   const handleClose = () => {
     setMode("default");
@@ -280,10 +280,16 @@ const NamePronounce = () => {
             handleClose={handleClose}
             setMode={setMode}
             preferredName={preferredName}
+            refreshPage={(arg) => {
+              setRefresh(arg)
+            }}
           />
         </DialogContent>
 
       </BootstrapDialog>
+      {
+        refresh && <></>
+      }
       </div>
 
     );
