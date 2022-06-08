@@ -1,10 +1,18 @@
-import { CLOSE_DIALOG, CLOSE_PROGRESS, OPEN_DIALOG, OPEN_PROGRESS } from "../actions/common.action";
+import { CLOSE_DIALOG, CLOSE_PROGRESS, OPEN_DIALOG, OPEN_PROGRESS, SET_COUNTRY_LIST } from "../actions/common.action";
 
 const initialState = {
   openDialog: false,
   message: "",
   messageType: "Confirmation",
-  progress: false
+  progress: false,
+  countryList: [{
+    "locale": "en-US",
+    "countryName": "English(US)"
+},
+{
+    "locale": "en-AU",
+    "countryName": "English(Australia)"
+}]
 }
 export const commonReducer = (state={}, action) => {
   switch(action.type){
@@ -30,6 +38,12 @@ export const commonReducer = (state={}, action) => {
       return({
         ...state,
         progress: false
+      });
+    case SET_COUNTRY_LIST:
+      console.log("action.countryList=", action.countryList);
+      return({
+        ...state,
+        countryList: action.countryList
       });
     default: return({
       ...state

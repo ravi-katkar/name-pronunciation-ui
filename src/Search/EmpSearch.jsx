@@ -112,7 +112,8 @@ export default function EmpSearch() {
             "uid": uid,
             "empId": row.empId,
             "firstName": row.firstName,
-            "entitlement": flag? ROLE_ADMIN : ROLE_EMPLOYEE
+            "entitlement": flag? ROLE_ADMIN : ROLE_EMPLOYEE,
+            "createdBy": "SYSTEM"
         })
         .then(response => {
           if(response === SUCCESS){
@@ -143,6 +144,9 @@ export default function EmpSearch() {
   return (
     <div>
       <h1>Employee Search</h1>
+      <div>
+        <p>Search employees by either User ID, First Name, Last Name, Middle Name or Preferred Name.</p>
+      </div>
       <div style={{display: 'flex', alignItems: 'center'}}>
           <TextField
               id="outlined-basic"

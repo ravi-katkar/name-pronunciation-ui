@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
 import { setUserDetails } from '../redux/actions/user.entitlement.action';
+import { CircularProgress } from '@mui/material';
 
 // function Copyright(props: any) {
 //   return (
@@ -39,13 +40,15 @@ export default function SignIn() {
   //     password: data.get('password'),
   //   });
   // };
-  const [userid, setUserid] = React.useState("UID01");
+  const [userid, setUserid] = React.useState("u911222");
   const [password, setPassword] = React.useState("");
+  const [progress, setProgress] = React.useState(false);
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
     // alert(userid);
     dispatch(setUserDetails(userid));
+    setProgress(true);
   }
   return (
     <ThemeProvider theme={theme}>
@@ -100,6 +103,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
+              {progress && <CircularProgress />}
               Sign In
             </Button>
             {/* <Grid container>

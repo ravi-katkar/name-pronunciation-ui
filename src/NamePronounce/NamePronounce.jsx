@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Dialog, DialogContent, DialogContentText, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, Select, TextField, Typography, Option, FormControl, InputLabel, MenuItem, FormLabel, RadioGroup, Radio } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import RecordAudio from "../Audio/RecordAudio.js";
@@ -11,21 +11,39 @@ import UploadIcon from '@mui/icons-material/Upload';
 import SaveIcon from '@mui/icons-material/Save';
 import { updateEmployee } from "../redux/actions/search.action.js";
 import { CONFIRMATION, ERROR, SUCCESS } from "../common/constants.js";
-import { openDialog } from "../redux/actions/common.action.js";
+import { getCountryList, openDialog } from "../redux/actions/common.action.js";
 import { setUserDetails } from "../redux/actions/user.entitlement.action.js";
 
 const NamePronounce = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.userEntitlement.user);
+  const countryList = useSelector(state => state.common.countryList) || [];
+//   const countryList= [{
+//     "locale": "en-US",
+//     "countryName": "English(US)"
+// },
+// {
+//     "locale": "en-AU",
+//     "countryName": "English(Australia)"
+// },]
+  console.log("countryList==", countryList);
   const [preferredName, setPreferredName] = useState(user.preferredName);
   const [mode, setMode] = useState("default");
   const [updatePrefName, setUpdatePrefName] = useState(false);
   const [blobObj, setBlobObj] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [country, setCountry] = useState("en-US");
+  const [gender, setGender] = useState("FEMALE");
   const preferredNameRef = useRef();
   const handleClose = () => {
     setMode("default");
   }
+  useEffect(()=>{
+    getCountryList()
+    .then(countryListAction => {
+      dispatch(countryListAction);
+    })
+  }, []);
   // useEffect(()=>{
   //   console.log("in useEffect.......");
   //   getStandardPronunciation("raghava")
@@ -50,10 +68,15 @@ const NamePronounce = () => {
     const blobObj = "";
     let url = baseURL+"/getNamePronunciation/"+user.uid;
     if(mode==="standard"){
-      url = baseURL+"/synthesize?inputText="+preferredName;
-      // console.log("before................");
-      // blobObj = await getStandardPronunciation(preferredName);
-      // console.log("after................");
+      let name=preferredName;
+      if(!preferredName){
+        name = user.firstName;
+        if(user.lastName){
+          name.append(" ").append(user.lastName);
+        }
+      }
+
+      url = baseURL+"/synthesize?inputText="+name+"&locale="+country+"&gender="+gender;
     }else{
       url = baseURL+"/getNamePronunciation/"+user.uid;
     }
@@ -62,7 +85,8 @@ const NamePronounce = () => {
 
   const standardUpload = () => {
     console.log("download1");
-    let audio = document.querySelector("audio");
+    // let audio = document.querySelector("audio");
+
     console.log("download2", audio);
     let blob = audio.getBlob();
     console.log("download3");
@@ -82,10 +106,22 @@ const NamePronounce = () => {
     console.log("download5");
   };
 
+  function getFileName(fileExtension) {
+    let d = new Date();
+    let year = d.getFullYear();
+    let month = d.getMonth();
+    let date = d.getDate();
+    return 'RecordRTC-' + year + month + date + '-' + d.getUTCMilliseconds() + '.' + fileExtension;
+  }
+
     return(
       <div>
         <h2>Customize Name Pronunciation</h2>
-        {/* <Record /> */}
+        <div>
+          <p>To update the preferred name, select “Update Preferred Name” and click on “GET STANDARD PRONUNCIATION” to listen standard pronunciation and select “SAVE”.</p>
+          <p>To override the existing name pronunciation, Select “UPDATE PRONUNCIATION (RECORD NEW VOICE)” button and record your voice.</p>
+        </div>
+
         <Box sx={{ borderRadius: 1, border:1, padding:2,'& .MuiTextField-root': { m: 1, width: '25ch' } }}>
         <TextField name="uid" value={user.uid} disabled label="User ID" />
         <TextField name="firstName" value={user.firstName} disabled label="First Name" />
@@ -100,8 +136,8 @@ const NamePronounce = () => {
           onChange={({target}) => setPreferredName(target.value)}
           ref={preferredNameRef}
         />
-
-          <Checkbox
+        <FormControlLabel
+          control={<Checkbox
             name="updatePrefName"
             checked={updatePrefName}
             onClick={({target})=>{
@@ -112,19 +148,57 @@ const NamePronounce = () => {
               }
 
             }}
-          />
-          Update Preferred Name
-          &nbsp;
-          {updatePrefName &&
-          <Button
-            variant="contained"
-            onClick={() => {
-              setMode("standard");
-              setUpdatePrefName(false);
-            }}
+            />}
+          label="Update Preferred Name"
+        />
+        {updatePrefName &&
+        <div style={{paddingTop: "1rem", paddingLeft:"0.5rem"}}>
+        <FormControl>
+          <InputLabel id="demo-simple-select-label">Country</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={country}
+            label="Country"
+            onChange={({target}) => setCountry(target.value)}
+
           >
-            Get Standard Pronunciation
-          </Button>}
+            {
+              countryList.map((obj,i)=>{
+                return <MenuItem key={i} value={obj.locale}>{obj.countryName}</MenuItem>
+              })
+            }
+          </Select>
+        </FormControl>
+        <FormControl style={{paddingLeft:"1rem"}}>
+          <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="gender"
+            value={gender}
+            onChange={({target}) => setGender(target.value)}
+
+          >
+            <FormControlLabel value="FEMALE" control={<Radio />} label="Female" />
+            <FormControlLabel value="MALE" control={<Radio />} label="Male" />
+          </RadioGroup>
+        </FormControl>
+        </div>
+        }
+
+          {updatePrefName &&
+          <div style={{paddingTop: "1rem", paddingLeft:"0.5rem"}}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setMode("standard");
+                setUpdatePrefName(false);
+              }}
+            >
+              Get Standard Pronunciation
+            </Button>
+          </div>}
 
       </Box>
       <br />
@@ -155,39 +229,34 @@ const NamePronounce = () => {
           &nbsp;
           &nbsp;
           <Button
+            variant="contained"
             onClick={() => {setMode("custom")}}
           >
             Update Pronunciation (Record new voice)
           </Button>
-          {/* <Button
-            disabled={!stdPronounceMode}
-            onClick={standardUpload}
-            endIcon={<UploadIcon />}
-            sx={{paddingLeft: "2rem"}}
-            variant="contained"
-          >
-            Upload
-          </Button> */}
+
         </div>
       </Box>}
       &nbsp;
       <div>
-        {mode === "standard" &&
+        {mode === "standard" && !updatePrefName &&
           <Button
             variant="contained"
-            onClick={()=>{updateEmployee({
+            onClick={()=> {
+            updateEmployee({
               "uid": user.uid,
               "empId": user.empId,
               "firstName": user.firstName,
               "preferredName": preferredName,
               "entitlement": user.entitlement,
-              "createdBy": "SYSTEM"
+              "createdBy": "SYSTEM",
+              "genderVoice": gender,
+              "locale": country
             })
             .then(response => {
               if(response === SUCCESS){
                 dispatch(setUserDetails(user.uid));
                 dispatch(openDialog("Updated Successfully", CONFIRMATION));
-                //setRefresh(!refresh);
                 setMode("default");
               }
             })
