@@ -244,8 +244,8 @@ const captureMicrophone = (callback) => {
         "uid": props.uid,
         "format": "audio/mpeg",
         "createdBy":"SYSTEM"
-        // ,
-        // "preferredName": props.preferredName
+        ,
+        "preferredName": props.preferredName
     })
     .then(response=>{
       if(response.data.status===SUCCESS){

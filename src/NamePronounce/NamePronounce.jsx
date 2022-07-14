@@ -251,7 +251,10 @@ const NamePronounce = () => {
               "entitlement": user.entitlement,
               "createdBy": "SYSTEM",
               "genderVoice": gender,
-              "locale": country
+              "locale": country,
+              "lastName": user.lastName,
+              "emailId": user.emailId,
+              "middleName": user.middleName
             })
             .then(response => {
               if(response === SUCCESS){

@@ -40,7 +40,7 @@ export default function SignIn() {
   //     password: data.get('password'),
   //   });
   // };
-  const [userid, setUserid] = React.useState("u911222");
+  const [userid, setUserid] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [progress, setProgress] = React.useState(false);
   const dispatch = useDispatch();
